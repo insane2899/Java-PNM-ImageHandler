@@ -120,12 +120,16 @@ public class Histogram{
 				int yEnd = yAxis + (int)((i+1)*scaleHorizontal);
 				int xBeg = xAxis - (int)(this.histogram[i][j]*scaleVertical);
 				int xEnd = xAxis;
-				//for(int x=0;x<3;x++){
-				//	if(x!=j){
-				//		colorRectangle(img,new Point(xBeg,yBeg),new Point(xEnd,yEnd),0,x);
-				//	}
-				//}
 				colorRectangle(img,new Point(xBeg,yBeg),new Point(xEnd,yEnd),50,j);
+				/*
+				for(int k=0;k<3;k++){
+					if(k!=j){
+						colorRectangle(img,new Point(xBeg,yBeg),new Point(xEnd,yEnd),0,k);
+					}
+					else{
+						colorRectangle(img,new Point(xBeg,yBeg),new Point(xEnd,yEnd),255,k);
+					}
+				}*/
 			}
 		}
 		return img;
