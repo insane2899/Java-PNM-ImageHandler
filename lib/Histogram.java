@@ -150,7 +150,9 @@ public class Histogram{
 		int maxPixelDensity=0;
 		for(int i=0;i<256;i++){
 			for(int j=0;j<3;j++){
-				maxPixelDensity = Math.max(maxPixelDensity,histogram[i][j]);
+				if(!colours.contains(j)){
+					maxPixelDensity = Math.max(maxPixelDensity,histogram[i][j]);
+				}
 			}
 		}
 		double scaleVertical = (double)heightMax/maxPixelDensity;
