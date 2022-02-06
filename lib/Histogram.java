@@ -1,6 +1,7 @@
 package lib;
 
 import java.util.List;
+import java.util.Arrays;
 
 public class Histogram{
 
@@ -96,43 +97,7 @@ public class Histogram{
 	}
 
 	private PNMImage getHistogramImageColor(int height,int width)throws Exception{
-		check(width,256,"Size small for histogram");
-		check(height,200,"Size small for histogram");
-		PNMImage img = new PNMImage("P3",height,width);
-		int widthHistogram = width - 2*(int)(((double)1/15)*width);
-		int yAxis = (width - widthHistogram)/2;
-		int xAxis = height - (int)(((double)1/15)*height);
-		int axisThickness = 10;
-		colorRectangle(img,new Point(xAxis,yAxis),new Point(xAxis+axisThickness,yAxis+widthHistogram),0,3);
-		colorRectangle(img,new Point(height-xAxis,yAxis-axisThickness),new Point(xAxis+axisThickness,yAxis),0,3);
-		int heightMax = height - 2*(height - xAxis);
-		int maxPixelDensity=0;
-		for(int i=0;i<256;i++){
-			for(int j=0;j<3;j++){
-				maxPixelDensity = Math.max(maxPixelDensity,histogram[i][j]);
-			}
-		}
-		double scaleVertical = (double)heightMax/maxPixelDensity;
-		double scaleHorizontal = (double)widthHistogram/256;
-		for(int j=0;j<3;j++){
-			for(int i=0;i<256;i++){
-				int yBeg = yAxis + (int)(i*scaleHorizontal);
-				int yEnd = yAxis + (int)((i+1)*scaleHorizontal);
-				int xBeg = xAxis - (int)(this.histogram[i][j]*scaleVertical);
-				int xEnd = xAxis;
-				colorRectangle(img,new Point(xBeg,yBeg),new Point(xEnd,yEnd),50,j);
-				/*
-				for(int k=0;k<3;k++){
-					if(k!=j){
-						colorRectangle(img,new Point(xBeg,yBeg),new Point(xEnd,yEnd),0,k);
-					}
-					else{
-						colorRectangle(img,new Point(xBeg,yBeg),new Point(xEnd,yEnd),255,k);
-					}
-				}*/
-			}
-		}
-		return img;
+		return getHistogramImageColor(height,width,Arrays.asList(0,1,2));
 
 	}
 
