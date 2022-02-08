@@ -1,4 +1,5 @@
 package lib;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -69,16 +70,7 @@ public class ImageUtil{
 			throw new IllegalArgumentException("Image must be grayscale");
 		}
 		Histogram hs = new Histogram(img);
-		int totalPixels = 0;
-		for(int i=0;i<256;i++){
-			totalPixels += hs.getHistogramLevel(i);
-		}
-		int[] newGrayScale = new int[256];
-		int curr = 0;
-		for(int i=0;i<256;i++){
-			curr+=hs.getHistogramLevel(i);
-			newGrayScale[i]=Math.round((((float)curr)*255)/totalPixels);
-		}
+		int[] newGrayScale = hs.getCDF();
 		PNMImage output = new PNMImage("P2",img.getHeight(),img.getWidth());
 		for(int i=0;i<img.getHeight();i++){
 			for(int j=0;j<img.getWidth();j++){
@@ -86,6 +78,37 @@ public class ImageUtil{
 			}
 		}
 		return output;
+	}
+
+	public static PNMImage matchHistogram(Histogram reference,PNMImage target){
+		Histogram targetHS = new Histogram(target);
+		int[] refCDF = reference.getCDF();
+		int[] tarCDF = targetHS.getCDF();
+		int[] tranCDF = new int[256];
+		for(int i=0;i<256;i++){
+			tranCDF[i] = getClosestMatching(tarCDF[i],refCDF);
+		}
+		PNMImage output = new PNMImage("P2",target.getHeight(),target.getWidth());
+		for(int i=0;i<target.getHeight();i++){
+			for(int j=0;j<target.getWidth();j++){
+				output.setPixel(i,j,tranCDF[target.getPixel(i,j)]);
+			}
+		}
+		return output;
+
+	}
+
+	private static int getClosestMatching(int val,int[] array){
+		int minDiff = val;
+		int ans = 0;
+		for(int i=0;i<256;i++){
+			int diff = Math.abs(val-array[i]);
+			if(diff<minDiff){
+				minDiff = diff;
+				ans = i;
+			}
+		}
+		return ans;
 	}
 
 }

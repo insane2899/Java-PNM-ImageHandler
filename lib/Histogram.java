@@ -113,22 +113,22 @@ public class Histogram{
 		colorRectangle(img,new Point(height-xAxis,yAxis-axisThickness),new Point(xAxis+axisThickness,yAxis),0,3);
 		int heightMax = height - 2*(height - xAxis);
 		int maxPixelDensity=0;
-		for(int i=0;i<256;i++){
-			for(int j=0;j<3;j++){
-				if(!colours.contains(j)){
-					maxPixelDensity = Math.max(maxPixelDensity,histogram[i][j]);
+		for(int j=0;j<3;j++){
+			if(colours.contains(j)){
+				for(int i=0;i<256;i++){
+					maxPixelDensity = Math.max(maxPixelDensity,this.histogram[i][j]);
 				}
 			}
 		}
 		double scaleVertical = (double)heightMax/maxPixelDensity;
 		double scaleHorizontal = (double)widthHistogram/256;
-		for(int j=0;j<colours.size();j++){
+		for(int j:colours){
 			for(int i=0;i<256;i++){
 				int yBeg = yAxis + (int)(i*scaleHorizontal);
 				int yEnd = yAxis + (int)((i+1)*scaleHorizontal);
 				int xBeg = xAxis - (int)(this.histogram[i][j]*scaleVertical);
 				int xEnd = xAxis;
-				colorRectangle(img,new Point(xBeg,yBeg),new Point(xEnd,yEnd),50,colours.get(j));
+				colorRectangle(img,new Point(xBeg,yBeg),new Point(xEnd,yEnd),50,j);
 			}
 		}
 		return img;
@@ -189,6 +189,20 @@ public class Histogram{
 				}
 			}
 		}
+	}
+
+	protected int[] getCDF(){
+		int[] cdf = new int[256];
+		int totalPixels = 0;
+		for(int i=0;i<this.histogram.length;i++){
+			totalPixels+=this.histogram[i][0];
+		}
+		int curr = 0;
+		for(int i=0;i<this.histogram.length;i++){
+			curr+=this.histogram[i][0];
+			cdf[i]=Math.round((((float)curr)*255)/totalPixels);
+		}
+		return cdf;
 	}
 
 	@Override
