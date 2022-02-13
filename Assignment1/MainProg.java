@@ -7,16 +7,16 @@ import lib.*;
 
 public class MainProg{
 	public static void main(String[] args){
-		PNMImage img = new PNMImage("Dataset/corpus1.pbm");
+		PNMImage img = ImageUtil.readImage("Dataset/corpus1.pbm");
 		List<ImageComponent> components = ImageUtil.getImageComponents(img,8);
 		showComponents(components);
 		PNMImage newImage = removeComponents(components);
-		newImage.writeImage("Assignment1/output.pbm");
+		ImageUtil.writeImage(newImage,"Assignment1/output.pbm","P1");
 		System.out.println("Done");
 	}
 
 	static void showComponents(List<ImageComponent> components){
-		PNMImage newImage = new PNMImage("Dataset/corpus1.pbm");
+		PNMImage newImage = ImageUtil.readImage("Dataset/corpus1.pbm");
 		for(int i=0;i<components.size();i++){
 			for(int x=components.get(i).getMinX();x<=components.get(i).getMaxX();x++){
 				newImage.setPixel(x,components.get(i).getMinY(),1);
@@ -27,12 +27,12 @@ public class MainProg{
 				newImage.setPixel(components.get(i).getMaxX(),y,1);
 			}
 		}
-		newImage.writeImage("Assignment1/SeparatedComponents.pbm");
+		ImageUtil.writeImage(newImage,"Assignment1/SeparatedComponents.pbm","P1");
 
 	}
 
 	static PNMImage removeComponents(List<ImageComponent> components){
-		PNMImage newImage = new PNMImage("Dataset/corpus1.pbm");
+		PNMImage newImage = ImageUtil.readImage("Dataset/corpus1.pbm");
 		for(int i=0;i<components.size();i++){
 			if(components.get(i).getMaxX()-components.get(i).getMinX()<=10 || components.get(i).getMaxY()-components.get(i).getMinY()<=10){
 				//System.out.println("Removed Component");

@@ -43,7 +43,7 @@ public class Histogram{
 	}
 
 	private void createHistogram(PNMImage img){
-		if(img.getFormat().equals("P1")||img.getFormat().equals("P2")){
+		if(img.getOriginalFormat().equals("P1")||img.getOriginalFormat().equals("P2")){
 			this.histogram = new int[256][1];
 			this.numColors = 1;
 			this.maxValue = -1;
@@ -104,7 +104,7 @@ public class Histogram{
 	private PNMImage getHistogramImageColor(int height,int width,List<Integer> colours)throws Exception{
 		check(width,256,"Size small for histogram");
 		check(height,200,"Size small for histogram");
-		PNMImage img = new PNMImage("P3",height,width);
+		PNMImage img = new PNMImage(height,width,"P3",255);
 		int widthHistogram = width - 2*(int)(((double)1/15)*width);
 		int yAxis = (width - widthHistogram)/2;
 		int xAxis = height - (int)(((double)1/15)*height);
@@ -138,7 +138,7 @@ public class Histogram{
 	private PNMImage getHistogramImageBitmap(int height,int width)throws Exception{
 		check(width,256,"Size small for histogram");
 		check(height,200,"Size small for histogram");
-		PNMImage img = new PNMImage("P1",height,width);
+		PNMImage img = new PNMImage(height,width,"P1",0);
 		int widthHistogram = width - 2*(int)(((double)1/15)*width);
 		int yAxis = (width - widthHistogram)/2;
 		int xAxis = height - (int)(((double)1/15)*height);

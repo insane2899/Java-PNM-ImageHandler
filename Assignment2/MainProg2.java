@@ -7,12 +7,12 @@ import lib.*;
 
 public class MainProg2{
 	public static void main(String[] args){
-		PNMImage img3 = new PNMImage("Dataset/image2.ppm");
+		PNMImage img3 = ImageUtil.readImage("Dataset/image2.ppm");
 		Histogram hs2 = new Histogram(img3);
 		PNMImage img4 = hs2.getHistogramImage(3000,3000);
-		img4.writeImage("Assignment2/ColorHistogram/HistogramColor.ppm");
+		ImageUtil.writeImage(img4,"Assignment2/ColorHistogram/HistogramColor.ppm","P3");
 		PNMImage img5 = hs2.getHistogramImage(3000,3000,Arrays.asList(0,1));
-		img5.writeImage("Assignment2/ColorHistogram/HistogramColorCustom.ppm");
+		ImageUtil.writeImage(img5,"Assignment2/ColorHistogram/HistogramColorCustom.ppm","P6");
 		System.out.println("Done");
 	}
 }

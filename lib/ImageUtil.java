@@ -66,12 +66,12 @@ public class ImageUtil{
 	}
 
 	public static PNMImage enhanceContrast(PNMImage img)throws IllegalArgumentException{
-		if(!img.getFormat().equals("P2")){
+		if(!img.getOriginalFormat().equals("P2")){
 			throw new IllegalArgumentException("Image must be grayscale");
 		}
 		Histogram hs = new Histogram(img);
 		int[] newGrayScale = hs.getCDF();
-		PNMImage output = new PNMImage("P2",img.getHeight(),img.getWidth());
+		PNMImage output = new PNMImage(img.getHeight(),img.getWidth(),"P2",255);
 		for(int i=0;i<img.getHeight();i++){
 			for(int j=0;j<img.getWidth();j++){
 				output.setPixel(i,j,newGrayScale[img.getPixel(i,j)]);
@@ -88,14 +88,13 @@ public class ImageUtil{
 		for(int i=0;i<256;i++){
 			tranCDF[i] = getClosestMatching(tarCDF[i],refCDF);
 		}
-		PNMImage output = new PNMImage("P2",target.getHeight(),target.getWidth());
+		PNMImage output = new PNMImage(target.getHeight(),target.getWidth(),"P2",255);
 		for(int i=0;i<target.getHeight();i++){
 			for(int j=0;j<target.getWidth();j++){
 				output.setPixel(i,j,tranCDF[target.getPixel(i,j)]);
 			}
 		}
 		return output;
-
 	}
 
 	private static int getClosestMatching(int val,int[] array){
@@ -109,6 +108,19 @@ public class ImageUtil{
 			}
 		}
 		return ans;
+	}
+
+	public static PNMImage getEmptyImage(int height,int width,String format,int fillColor){
+		PNMImage ret = new PNMImage(height,width,format,fillColor);
+		return ret;
+	}
+
+	public static PNMImage readImage(String fileName){
+		return new PNMImage(fileName);
+	}
+
+	public static void writeImage(PNMImage img,String fileName,String format){
+		img.writeImage(fileName,format);
 	}
 
 }
