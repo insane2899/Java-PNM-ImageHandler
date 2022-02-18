@@ -5,19 +5,6 @@ import java.util.Arrays;
 
 public class Histogram{
 
-	static class Point{
-		int x,y;
-		public Point(int x,int y){
-			this.x = x;
-			this.y = y;
-		}
-		@Override
-		public String toString(){
-			return "("+this.x+","+this.y+")";
-		}
-	}
-
-
 	private int[][] histogram;
 	private int maxValue;
 	private int minValue;

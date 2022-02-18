@@ -39,6 +39,22 @@ public class PNMImage{
 	private PNMImage(){
 	}
 
+	protected PNMImage(PNMImage img){
+		this.height = img.getHeight();
+		this.width = img.getWidth();
+		this.maxValue = img.getMaxValue();
+		this.originalFormat = img.getOriginalFormat();
+		this.numColors = img.getNumColors();
+		this.pixels = new int[height][width][numColors];
+		for(int i=0;i<height;i++){
+			for(int j=0;j<width;j++){
+				for(int k=0;k<numColors;k++){
+					this.pixels[i][j][k]=img.getPixel(i,j,k);
+				}
+			}
+		}
+	}
+
 	protected PNMImage(int height,int width,String format,int fillColor){
 		this.originalFormat = format;
 		this.height = height;
@@ -68,6 +84,10 @@ public class PNMImage{
 				}
 			}
 		}
+	}
+
+	public int getNumColors(){
+		return this.numColors;
 	}
 
 	public String getOriginalFormat(){

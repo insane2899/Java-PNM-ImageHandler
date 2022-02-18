@@ -123,4 +123,167 @@ public class ImageUtil{
 		img.writeImage(fileName,format);
 	}
 
+	public static PNMImage dilateImage(PNMImage input,StructureElement elem){
+		PNMImage output = new PNMImage(input);
+		switch(input.getOriginalFormat()){
+		case "P1":
+		case "P4":
+			for(int i=0;i<input.getHeight();i++){
+				for(int j=0;j<input.getWidth();j++){
+					if(input.getPixel(i,j)==0){
+						applyDilationBitmap(input,output,new Point(i,j),elem);
+					}
+				}
+			}
+			break;
+		case "P2":
+		case "P5":
+		case "P3":
+		case "P6":
+			for(int i=0;i<input.getHeight();i++){
+				for(int j=0;j<input.getWidth();j++){
+					for(int k=0;k<input.getNumColors();k++){
+						applyDilationGrayScale(input,output,new Point(i,j),elem,k);
+					}
+				}
+			}
+			break;
+		}
+		return output;
+	}	
+
+	private static void applyDilationBitmap(PNMImage input,PNMImage output,Point p,StructureElement elem){
+		boolean isForegroundPresent = false;
+		for(int i=0;i<elem.getHeight();i++){
+			for(int j=0;j<elem.getWidth();j++){
+				int xDist = elem.getCentre().getX() - i;
+				int yDist = elem.getCentre().getY() - j;
+				int posX = p.getX()+xDist;
+				int posY = p.getY()+yDist;
+				if(posX>=0 && posY>=0 && posX< output.getHeight() && posY< output.getWidth()){
+					if(input.getPixel(posX,posY)==1){
+						isForegroundPresent = true;
+					}
+				}
+			}
+		}
+		if(isForegroundPresent){
+			output.setPixel(p.getX(),p.getY(),1);
+		}
+	}
+
+	private static void applyDilationGrayScale(PNMImage input,PNMImage output,Point p,StructureElement elem,int color){
+		int maxPixelDensity = 0;
+		for(int i=0;i<elem.getHeight();i++){
+			for(int j=0;j<elem.getWidth();j++){
+				int xDist = elem.getCentre().getX() - i;
+				int yDist = elem.getCentre().getY() - j;
+				int posX = p.getX()+xDist;
+				int posY = p.getY()+yDist;
+				if(posX>=0 && posY>=0 && posX< output.getHeight() && posY< output.getWidth()){
+					maxPixelDensity = Math.max(maxPixelDensity,input.getPixel(posX,posY,color));
+				}
+			}
+		}
+		for(int i=0;i<elem.getHeight();i++){
+			for(int j=0;j<elem.getWidth();j++){
+				int xDist = elem.getCentre().getX() - i;
+				int yDist = elem.getCentre().getY() - j;
+				int posX = p.getX()+xDist;
+				int posY = p.getY()+yDist;
+				if(posX>=0 && posY>=0 && posX< output.getHeight() && posY< output.getWidth()){
+					output.setPixel(posX,posY,color,maxPixelDensity);
+				}
+			}
+		}
+	}
+
+	public static PNMImage erodeImage(PNMImage input,StructureElement elem){
+		PNMImage output = new PNMImage(input);
+		switch(input.getOriginalFormat()){
+		case "P1":
+		case "P4":
+			for(int i=0;i<input.getHeight();i++){
+				for(int j=0;j<input.getWidth();j++){
+					if(input.getPixel(i,j)==1){
+						applyErosionBitmap(input,output,new Point(i,j),elem);
+					}
+				}
+			}
+			break;
+		case "P2":
+		case "P3":
+		case "P5":
+		case "P6":
+			for(int i=0;i<input.getHeight();i++){
+				for(int j=0;j<input.getWidth();j++){
+					for(int k=0;k<input.getNumColors();k++){
+						applyErosionGrayScale(input,output,new Point(i,j),elem,k);
+					}
+				}
+			}
+			break;
+		}
+		return output;
+	}
+
+	private static void applyErosionBitmap(PNMImage input,PNMImage output,Point p,StructureElement elem){
+		boolean isBackgroundPresent = false;
+		for(int i=0;i<elem.getHeight();i++){
+			for(int j=0;j<elem.getWidth();j++){
+				int xDist = elem.getCentre().getX()-i;
+				int yDist = elem.getCentre().getY()-j;
+				int posX = p.getX()+xDist;
+				int posY = p.getY()+yDist;
+				if(posX>=0 && posY>=0 && posX<input.getHeight() && posY<input.getWidth()){
+					if(input.getPixel(posX,posY)==0){
+						isBackgroundPresent = true;
+					}
+				}
+			}
+		}
+		if(isBackgroundPresent){
+			output.setPixel(p.getX(),p.getY(),0);
+		}
+	}
+
+	private static void applyErosionGrayScale(PNMImage input,PNMImage output,Point p,StructureElement elem,int color){
+		int minPixelDensity = 255;
+		for(int i=0;i<elem.getHeight();i++){
+			for(int j=0;j<elem.getWidth();j++){
+				int xDist = elem.getCentre().getX()-i;
+				int yDist = elem.getCentre().getY()-j;
+				int posX = p.getX()+xDist;
+				int posY = p.getY()+yDist;
+				if(posX>=0 && posY>=0 && posX<input.getHeight() && posY<input.getWidth()){
+					minPixelDensity = Math.min(minPixelDensity,input.getPixel(posX,posY,color));
+				}
+			}
+		}
+		for(int i=0;i<elem.getHeight();i++){
+			for(int j=0;j<elem.getWidth();j++){
+				int xDist = elem.getCentre().getX() - i;
+				int yDist = elem.getCentre().getY() - j;
+				int posX = p.getX()+xDist;
+				int posY = p.getY()+yDist;
+				if(posX>=0 && posY>=0 && posX< output.getHeight() && posY< output.getWidth()){
+					output.setPixel(posX,posY,color,minPixelDensity);
+				}
+			}
+		}
+	}
+
+	public static PNMImage openImage(PNMImage input,StructureElement elem){
+		//First erosion then dilation
+		PNMImage temp = erodeImage(input,elem);
+		PNMImage output = dilateImage(temp,elem);
+		return output;
+	}
+
+	public static PNMImage closeImage(PNMImage input,StructureElement elem){
+		//First dilation then erosion
+		PNMImage temp = dilateImage(input,elem);
+		PNMImage output = erodeImage(temp,elem);
+		return output;
+	}
 }
