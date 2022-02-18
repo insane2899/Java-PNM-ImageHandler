@@ -28,6 +28,13 @@ Assignment2/Matching/*.pbm
 Assignment2/Matching/*.pnm
 Assignment2/Matching/*.ppm
 
+Assignment3/OutputImages/*.pgm
+Assignment3/OutputImages/*.pbm
+Assignment3/OutputImages/*.pnm
+Assignment3/OutputImages/*.ppm
+
+Assignment3/OutputImages
+
 Test/Output/*.pgm
 Test/Output/*.ppm
 Test/Output/*.pnm
