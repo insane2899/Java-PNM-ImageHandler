@@ -286,4 +286,27 @@ public class ImageUtil{
 		PNMImage output = erodeImage(temp,elem);
 		return output;
 	}
+
+	public static PNMImage extractOutline(PNMImage input,StructureElement elem){
+		PNMImage output = getEmptyImage(input.getHeight(),input.getWidth(),input.getOriginalFormat(),0);
+		switch(input.getOriginalFormat()){
+		case "P1":
+		case "P4":
+			PNMImage temp = erodeImage(input,elem);
+			for(int i=0;i<input.getHeight();i++){
+				for(int j=0;j<input.getWidth();j++){
+					if(input.getPixel(i,j)==1 && temp.getPixel(i,j)==0){
+						output.setPixel(i,j,1);
+					}
+				}
+			}
+			break;
+		case "P2":
+		case "P3":
+		case "P5":
+		case "P6":
+			throw new IllegalArgumentException("Input must be binary image");
+		}
+		return output;
+	}
 }
