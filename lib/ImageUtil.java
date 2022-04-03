@@ -309,4 +309,20 @@ public class ImageUtil{
 		}
 		return output;
 	}
+
+	public static PNMImage[] bitPlaneSplicing(PNMImage input){
+		PNMImage[] outputs = new PNMImage[8];
+		for(int i=0;i<8;i++){
+			outputs[i] = getEmptyImage(input.getHeight(),input.getWidth(),"P4",0);
+			for(int x = 0;x<input.getHeight();x++){
+				for(int y = 0;y<input.getWidth();y++){
+					for(int z=0;z<input.getNumColors();z++){
+						int val = (input.getPixel(x,y,z) & (1<<i))>0?0:1;
+						outputs[i].setPixel(x,y,z,val);
+					}
+				}
+			}
+		}
+		return outputs;
+	}
 }
