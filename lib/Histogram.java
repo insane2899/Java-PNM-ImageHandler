@@ -30,7 +30,8 @@ public class Histogram{
 	}
 
 	private void createHistogram(PNMImage img){
-		if(img.getOriginalFormat().equals("P1")||img.getOriginalFormat().equals("P2")){
+		if(img.getOriginalFormat().equals("P1")||img.getOriginalFormat().equals("P2")||img.getOriginalFormat().equals("P4")
+			||img.getOriginalFormat().equals("P5")){
 			this.histogram = new int[256][1];
 			this.numColors = 1;
 			this.maxValue = -1;
